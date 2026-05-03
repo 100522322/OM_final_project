@@ -5,4 +5,6 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_executable(OM_final_project main.cpp
         Node.cpp
-        Node.h)
+        Node.h
+        Graph.cpp
+        Graph.h)

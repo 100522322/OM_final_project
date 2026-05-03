@@ -10,5 +10,11 @@
   "command": "\"E:\\Programacion\\JetBrains\\CLion 2026.1.1\\bin\\mingw\\bin\\g++.exe\" -g -std=gnu++20 -fdiagnostics-color=always -o CMakeFiles\\OM_final_project.dir\\Node.cpp.obj -c E:\\Programacion\\CLion\\OM_final_project\\Node.cpp",
   "file": "E:/Programacion/CLion/OM_final_project/Node.cpp",
   "output": "E:/Programacion/CLion/OM_final_project/cmake-build-debug/CMakeFiles/OM_final_project.dir/Node.cpp.obj"
+},
+{
+  "directory": "E:/Programacion/CLion/OM_final_project/cmake-build-debug",
+  "command": "\"E:\\Programacion\\JetBrains\\CLion 2026.1.1\\bin\\mingw\\bin\\g++.exe\" -g -std=gnu++20 -fdiagnostics-color=always -o CMakeFiles\\OM_final_project.dir\\Graph.cpp.obj -c E:\\Programacion\\CLion\\OM_final_project\\Graph.cpp",
+  "file": "E:/Programacion/CLion/OM_final_project/Graph.cpp",
+  "output": "E:/Programacion/CLion/OM_final_project/cmake-build-debug/CMakeFiles/OM_final_project.dir/Graph.cpp.obj"
 }
 ]

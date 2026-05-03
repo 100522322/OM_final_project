@@ -65,6 +65,14 @@ build CMakeFiles/OM_final_project.dir/Node.cpp.obj: CXX_COMPILER__OM_final_proje
   OBJECT_FILE_DIR = CMakeFiles\OM_final_project.dir
   TARGET_SUPPORT_DIR = CMakeFiles\OM_final_project.dir
 
+build CMakeFiles/OM_final_project.dir/Graph.cpp.obj: CXX_COMPILER__OM_final_project_unscanned_Debug E$:/Programacion/CLion/OM_final_project/Graph.cpp || cmake_object_order_depends_target_OM_final_project
+  CONFIG = Debug
+  DEP_FILE = CMakeFiles\OM_final_project.dir\Graph.cpp.obj.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\OM_final_project.dir
+  OBJECT_FILE_DIR = CMakeFiles\OM_final_project.dir
+  TARGET_SUPPORT_DIR = CMakeFiles\OM_final_project.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target OM_final_project
@@ -73,7 +81,7 @@ build CMakeFiles/OM_final_project.dir/Node.cpp.obj: CXX_COMPILER__OM_final_proje
 #############################################
 # Link the executable OM_final_project.exe
 
-build OM_final_project.exe: CXX_EXECUTABLE_LINKER__OM_final_project_Debug CMakeFiles/OM_final_project.dir/main.cpp.obj CMakeFiles/OM_final_project.dir/Node.cpp.obj
+build OM_final_project.exe: CXX_EXECUTABLE_LINKER__OM_final_project_Debug CMakeFiles/OM_final_project.dir/main.cpp.obj CMakeFiles/OM_final_project.dir/Node.cpp.obj CMakeFiles/OM_final_project.dir/Graph.cpp.obj
   CONFIG = Debug
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
