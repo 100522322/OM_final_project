@@ -18,8 +18,9 @@ class Graph {
 
     Graph();
 
-    bool loadFromFile(const std::string& filename);
+    bool load_from_file(const std::string& filename);
 
+    int count_conflicts(int node_idx);
 };
 
 

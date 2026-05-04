@@ -9,7 +9,7 @@
 
 Graph::Graph() : num_nodes(0), num_edges(0) {}
 
-bool Graph::loadFromFile(const std::string& filename) {
+bool Graph::load_from_file(const std::string& filename) {
 
   std::ifstream file(filename);
   if (!file.is_open()) {
@@ -41,4 +41,16 @@ bool Graph::loadFromFile(const std::string& filename) {
   }
   file.close();
   return true;
+}
+
+int Graph::count_conflicts(int node_idx) {
+  int count = 0;
+  int node_color = nodes[node_idx].color;
+
+  for (int neighbor_id : nodes[node_idx].neighbors) {
+    if (nodes[neighbor_id].color == node_color) {
+      count++;
+    }
+  }
+  return count;
 }
