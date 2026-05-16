@@ -20,7 +20,11 @@ class Graph {
 
     bool load_from_file(const std::string& filename);
 
-    int count_conflicts(int node_idx);
+    int count_conflicts(int node_id);
+
+    int fitness(std::vector<int> colors);
+
+    void color_graph(std::vector<int> colors);
 };
 
 

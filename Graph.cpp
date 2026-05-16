@@ -3,6 +3,8 @@
 //
 
 #include "Graph.h"
+
+#include <cmath>
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -13,7 +15,7 @@ bool Graph::load_from_file(const std::string& filename) {
 
   std::ifstream file(filename);
   if (!file.is_open()) {
-    std::cerr << "Error: Can't open the file" << filename << std::endl;
+    std::cerr << "Error: Can't open the file " << filename << std::endl;
     return false;
   }
 
@@ -43,14 +45,46 @@ bool Graph::load_from_file(const std::string& filename) {
   return true;
 }
 
-int Graph::count_conflicts(int node_idx) {
+int Graph::count_conflicts(int node_id) {
   int count = 0;
-  int node_color = nodes[node_idx].color;
+  int node_color = nodes[node_id].color;
 
-  for (int neighbor_id : nodes[node_idx].neighbors) {
+  for (int neighbor_id : nodes[node_id].neighbors) {
     if (nodes[neighbor_id].color == node_color) {
       count++;
     }
   }
   return count;
+}
+
+void Graph::color_graph(std::vector<int> colors) {
+  if (colors.size() != num_nodes) {
+    std::cerr << "Error: The number of nodes is not equal to the number of colors." << std::endl;
+  }
+
+  for (int i=0; i < num_nodes; i++) {
+    nodes[i].color = colors[i];
+  }
+}
+
+int Graph::fitness(std::vector<int> colors) {
+  // Calculate and return the fitness.
+  // Formula: Sum(err^n_colors)
+  this->color_graph(colors);
+
+  float total_errors = 0;
+  for (Node& node : nodes) {
+    float errors = this->count_conflicts(node.id)/2 ;
+
+
+    // TODO Change this when having formula
+    total_errors += errors;
+
+  }
+  int total_fitness = 0;
+  if (std::floor(total_errors)==total_errors) {
+    total_fitness = total_errors;
+  }
+
+  return total_fitness;
 }
