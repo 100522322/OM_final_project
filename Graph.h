@@ -25,6 +25,8 @@ class Graph {
     int fitness(std::vector<int> colors);
 
     void color_graph(std::vector<int> colors);
+
+    std::vector<int> random_color_graph(int num_colors);
 };
 
 

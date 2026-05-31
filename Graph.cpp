@@ -81,10 +81,18 @@ int Graph::fitness(std::vector<int> colors) {
     total_errors += errors;
 
   }
-  int total_fitness = 0;
+  int total_fitness = 1000000000000000000;
   if (std::floor(total_errors)==total_errors) {
     total_fitness = total_errors;
   }
 
   return total_fitness;
+}
+
+std::vector<int> Graph::random_color_graph(int num_colors) {
+  std::vector<int> colors;
+  for (int i=0; i < num_nodes; i++) {
+    colors.push_back(rand()%num_colors);
+  }
+  return colors;
 }
