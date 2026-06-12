@@ -63,30 +63,26 @@ void Graph::color_graph(std::vector<int> colors) {
   }
 
   for (int i=0; i < num_nodes; i++) {
-    nodes[i].color = colors[i];
+    nodes[i+1].color = colors[i];
   }
 }
 
 int Graph::fitness(std::vector<int> colors) {
   // Calculate and return the fitness.
   // Formula: Sum(err^n_colors)
-  this->color_graph(colors);
+  color_graph(colors);
 
-  float total_errors = 0;
+  int total_errors = 0;
   for (Node& node : nodes) {
-    float errors = this->count_conflicts(node.id)/2 ;
+    int errors = count_conflicts(node.id) ;
 
 
     // TODO Change this when having formula
     total_errors += errors;
 
   }
-  int total_fitness = 1000000000000000000;
-  if (std::floor(total_errors)==total_errors) {
-    total_fitness = total_errors;
-  }
 
-  return total_fitness;
+  return total_errors / 2;
 }
 
 std::vector<int> Graph::random_color_graph(int num_colors) {
