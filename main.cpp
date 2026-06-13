@@ -2,13 +2,16 @@
 #include "Graph.h"
 #include "SA.h"
 #include "ABC.h"
+#include "DHS.h"
 #include <chrono>
 #include <string>
+
+using namespace std;
 
 int main() {
     srand(time(0));
 
-    std::vector<std::string> instanaces = {
+    vector<string> instanaces = {
         "queen6_6.col.txt",
         "le450_15b.col.txt",
         "DSJC125.1.col",
@@ -45,7 +48,7 @@ int main() {
     Graph new_graph = Graph();
     new_graph.load_from_file("instances/DSJC125.1.col");
 
-    std::cout << "SA running" << std::endl;
+    cout << "SA running" << endl;
 
 
     int iterations = 10000;
@@ -54,18 +57,18 @@ int main() {
 
     SA sa(n_colors, new_graph, iterations, temperature, alpha);
 
-    using clock = std::chrono::high_resolution_clock;
+    using clock = std::chrono::steady_clock;
     auto start = clock::now();
 
-    std::vector<int> results = sa.run();
+    vector<int> results = sa.run();
 
     auto end = clock::now();
 
-    std::cout << "Best fitness:" << results[0] << std::endl;
-    std::cout << "Worst fitness:" << results[1] << std::endl;
+    cout << "Best fitness:" << results[0] << endl;
+    cout << "Worst fitness:" << results[1] << endl;
 
-    std::chrono::duration<double> elapsed = end - start;
-    std::cout << "SA run time: " << elapsed.count() << " seconds\n";
+    chrono::duration<double> elapsed = end - start;
+    cout << "SA run time: " << elapsed.count() << " seconds\n";
 
 
     n_colors = 8;
@@ -76,11 +79,10 @@ int main() {
     int colony_size = 20;
     int limit = 50;
 
-    std::cout << "ABC running" << std::endl;
+    cout << "ABC running" << endl;
 
     ABC abc(new_graph, n_colors, colony_size, limit, iterations);
 
-    using clock = std::chrono::high_resolution_clock;
     start = clock::now();
 
     results = abc.run();
@@ -88,7 +90,30 @@ int main() {
     end = clock::now();
     elapsed = end - start;
 
-    std::cout << "Best fitness:" << results[0] << std::endl;
-    std::cout << "Worst fitness:" << results[1] << std::endl;
-    std::cout << "ABC run time: " << elapsed.count() << " seconds\n";
+    cout << "Best fitness:" << results[0] << endl;
+    cout << "Worst fitness:" << results[1] << endl;
+    cout << "ABC run time: " << elapsed.count() << " seconds\n";
+
+    cout << "DHS running" << endl;
+
+    new_graph = Graph();
+    new_graph.load_from_file("instances/" + instanaces[2]);
+
+    int harmony_size = 20;
+    double HMCR = 0.9;
+    double PAR = 0.3;
+
+    DHS dhs(new_graph, n_colors, harmony_size, HMCR, PAR, iterations);
+
+    start = clock::now();
+    results = dhs.run();
+    end = clock::now();
+
+    elapsed = end - start;
+
+    cout << "Best fitness:" << results[0] << endl;
+    cout << "Worst fitness:" << results[1] << endl;
+    cout << "DHS run time: " << elapsed.count() << " seconds\n";
+
+    return 0;
 }
