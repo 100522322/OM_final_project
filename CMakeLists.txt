@@ -13,4 +13,6 @@ add_executable(OM_final_project
         SA.h
         ABC.cpp
         ABC.h
+        DHS.cpp
+        DHS.h
 )
