@@ -70,30 +70,10 @@ vector<int> DHS::new_solution() {
         double r2 = (double) rand() / RAND_MAX;
 
         if (r2 < PAR) {
-            new_sol[i] = best_color(i, new_sol);
+            new_sol[i] = best_color_local(i, new_sol);
         }
     }
     return new_sol;
-}
-
-int DHS::best_color(int node, vector<int> individual) {
-    int best_color = individual[node];
-    int best_fitness = graph.fitness(individual);
-
-    for (int c = 0; c < num_colors; c++) {
-        if (c == individual[node]) continue;
-
-        vector<int> temp = individual;
-        temp[node] = c;
-
-        int temp_fitness = graph.fitness(temp);
-
-        if (temp_fitness < best_fitness) {
-            best_fitness = temp_fitness;
-            best_color = c;
-        }
-    }
-    return best_color;
 }
 
 void DHS::update() {
@@ -121,4 +101,50 @@ int DHS::worst_index() const {
     }
 
     return indx;
+}
+
+vector<int> DHS::get_conflicting_vertices(const vector<int>& sol) const {
+    vector<int> conflicting;
+
+    for (int i = 1; i <= graph.num_nodes; i++) {
+        int color = sol[i - 1];
+
+        for (int neighbor_id : graph.nodes[i].neighbors) {
+            if (sol[neighbor_id - 1] == color) {
+                conflicting.push_back(i-1);
+                break;
+            }
+        }
+    }
+    return conflicting;
+}
+
+int DHS::best_color_local(int node, const vector<int>& sol) const {
+    int graph_node = node + 1;
+    int best_c = sol[node];
+    int best_conflicts = count_conflicts_local(node, sol, sol[node]);
+
+    for (int c = 0; c < num_colors; c++) {
+        if (c == sol[node]) continue;
+        int conflicts = count_conflicts_local(node, sol, c);
+        if (conflicts < best_conflicts) {
+            best_conflicts = conflicts;
+            best_c = c;
+            if (best_conflicts == 0) break;
+        }
+    }
+
+    return best_c;
+}
+
+int DHS::count_conflicts_local(int node, const vector<int>& sol, int color) const {
+    int graph_node = node + 1;
+    int count = 0;
+    for (int neighbor_id : graph.nodes[graph_node].neighbors) {
+        if (sol[neighbor_id - 1] == color) {
+            count++;
+        }
+    }
+
+    return count;
 }

@@ -73,9 +73,8 @@ int Graph::fitness(std::vector<int> colors) {
   color_graph(colors);
 
   int total_errors = 0;
-  for (Node& node : nodes) {
-    int errors = count_conflicts(node.id) ;
-
+  for (int i = 1; i <= num_nodes; i++) {
+    int errors = count_conflicts(i);
 
     // TODO Change this when having formula
     total_errors += errors;

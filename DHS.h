@@ -29,7 +29,10 @@ public:
 
     void initialize();
     vector<int> new_solution();
-    int best_color(int node, vector<int> individual);
     void update();
     int worst_index() const;
+
+    vector<int> get_conflicting_vertices(const vector<int>& solution) const;
+    int best_color_local(int node, const vector<int>& solution) const;
+    int count_conflicts_local(int node, const vector<int>& solution, int color) const;
 };
