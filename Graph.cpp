@@ -18,7 +18,10 @@ bool Graph::load_from_file(const std::string& filename) {
     std::cerr << "Error: Can't open the file " << filename << std::endl;
     return false;
   }
-
+  nodes.clear();
+  num_nodes = 0;
+  num_edges = 0;
+  
   std::string line;
 
   while (std::getline(file, line)) {
@@ -68,15 +71,12 @@ void Graph::color_graph(std::vector<int> colors) {
 }
 
 int Graph::fitness(std::vector<int> colors) {
-  // Calculate and return the fitness.
-  // Formula: Sum(err^n_colors)
   color_graph(colors);
 
   int total_errors = 0;
   for (int i = 1; i <= num_nodes; i++) {
     int errors = count_conflicts(i);
 
-    // TODO Change this when having formula
     total_errors += errors;
 
   }

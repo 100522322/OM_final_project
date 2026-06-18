@@ -69,3 +69,7 @@ Testing/
 .cache/
 
 cmake-build-debug/
+
+*.tex
+*.pdf
+*.md

@@ -66,13 +66,19 @@ vector<int> DHS::new_solution() {
         } else {
             new_sol[i] = rand() % num_colors;
         }
+    }
+
+    vector<int> conflicting_vertices = get_conflicting_vertices(new_sol);
+
+    if (!conflicting_vertices.empty()) {
+        int vertex = conflicting_vertices[rand() % conflicting_vertices.size()];
 
         double r2 = (double) rand() / RAND_MAX;
-
         if (r2 < PAR) {
-            new_sol[i] = best_color_local(i, new_sol);
+            new_sol[vertex] = best_color_local(vertex, new_sol);
         }
     }
+
     return new_sol;
 }
 
