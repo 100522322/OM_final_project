@@ -24,7 +24,6 @@ std::vector<int> ABC::run(){
     onlooker_phase();
     scout_phase();
 
-    update_best_and_worst();
     if (best.fitness == 0) {
       break;
     }
@@ -56,16 +55,7 @@ void ABC::initialize(){
 
 void ABC::employed_phase() {
   for (int i=0; i < colony_size; i++) {
-    std::vector<int> candidate = generate_neighbor(foods[i].individual);
-    int candidate_fitness = graph.fitness(candidate);
-
-    if (candidate_fitness < foods[i].fitness) {
-      foods[i].fitness = candidate_fitness;
-      foods[i].individual = candidate;
-      foods[i].trials = 0;
-    } else {
-      foods[i].trials++;
-    }
+    create_test_new_candidate(foods[i]);
   }
 }
 
@@ -74,16 +64,7 @@ void ABC::onlooker_phase() {
   for (int i=0; i < colony_size; i++) {
     int idx = select_food(probabilities);
 
-    std::vector<int> candidate = generate_neighbor(foods[idx].individual);
-    int candidate_fitness = graph.fitness(candidate);
-
-    if (candidate_fitness < foods[idx].fitness) {
-      foods[idx].fitness = candidate_fitness;
-      foods[idx].individual = candidate;
-      foods[idx].trials = 0;
-    }else {
-      foods[idx].trials++;
-    }
+   create_test_new_candidate(foods[idx]);
   }
 }
 void ABC::scout_phase() {
@@ -107,20 +88,44 @@ void ABC::update_best_and_worst(){
   }
 }
 
+void ABC::create_test_new_candidate(FoodSource& food) {
+  std::vector<int> candidate = food.individual;
 
-
-std::vector<int> ABC::generate_neighbor(const std::vector<int>& individual) {
-  std::vector<int> neighbor = individual;
-
-  int vertex = rand() % graph.num_nodes;
-  int old_color = neighbor[vertex];
+  int vertex =1 + rand() % graph.num_nodes;
+  int old_color = candidate[vertex];
   int new_color = old_color;
   while (new_color == old_color) {
     new_color = rand() % num_of_colors;
   }
+  candidate[vertex] = new_color;
 
-  neighbor[vertex] = new_color;
-  return neighbor;
+
+  int candidate_fitness = graph.fitness(candidate);
+  int old_fitness = food.fitness;
+
+  if (candidate_fitness < food.fitness) {
+    food.fitness = candidate_fitness;
+    food.individual = candidate;
+    food.trials = 0;
+
+    if (food.fitness < best.fitness) {
+      best = food;
+    }
+    if (old_fitness >= worst.fitness) {
+      worst = food;
+    }
+
+  } else {
+    food.trials++;
+
+    if (food.fitness < best.fitness) {
+      best = food;
+    }
+    if (old_fitness >= worst.fitness) {
+      worst = food;
+    }
+  }
+
 }
 
 double ABC::compute_score(int fitness) {

@@ -37,7 +37,7 @@ class ABC {
     void scout_phase();
     void update_best_and_worst();
 
-    std::vector<int> generate_neighbor(const std::vector<int>& individual);
+    void create_test_new_candidate(FoodSource& individual);
     std::vector<double> compute_prob();
     double compute_score(int fitness);
     int select_food(const std::vector<double>& probabilities) const;
