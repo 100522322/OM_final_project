@@ -1,0 +1,11 @@
+parameter,value,best,worst,avg,std
+colony_size,5,2,6,4,1.63299
+colony_size,10,2,4,3,0.816497
+colony_size,20,2,3,2.66667,0.471404
+colony_size,50,2,3,2.33333,0.471404
+colony_size,100,1,2,1.66667,0.471404
+limit,10,20,23,22,1.41421
+limit,25,5,9,7,1.63299
+limit,50,2,3,2.33333,0.471404
+limit,100,0,1,0.333333,0.471404
+limit,200,0,0,0,0

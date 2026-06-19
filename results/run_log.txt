@@ -1,0 +1,40 @@
+Instance: queen6_6 (k=7)
+SA Best: 0 Worst: 4 Avg: 2.8 Std: 1.32665 Time: 0.0231596s
+ABC Best: 2 Worst: 4 Avg: 3.4 Std: 0.916515 Time: 2.02498s
+DHS Best: 4 Worst: 10 Avg: 6.8 Std: 1.83303 Time: 0.0674053s
+------------------------------------------------------
+Instance: queen8_8 (k=9)
+SA Best: 4 Worst: 10 Avg: 7.6 Std: 1.49666 Time: 0.0702653s
+ABC Best: 8 Worst: 16 Avg: 13.8 Std: 2.44131 Time: 4.57653s
+DHS Best: 16 Worst: 32 Avg: 22 Std: 5.36656 Time: 0.0777029s
+------------------------------------------------------
+Instance: queen12_12 (k=13)
+SA Best: 30 Worst: 40 Avg: 34.4 Std: 3.32265 Time: 0.132231s
+ABC Best: 54 Worst: 70 Avg: 64.2 Std: 4.33128 Time: 12.524s
+DHS Best: 98 Worst: 114 Avg: 105.2 Std: 5.87878 Time: 0.234398s
+------------------------------------------------------
+Instance: le450_15b (k=15)
+SA Best: 71 Worst: 88 Avg: 78.6 Std: 4.73709 Time: 0.243759s
+ABC Best: 97 Worst: 112 Avg: 106.8 Std: 4.33128 Time: 23.3552s
+DHS Best: 245 Worst: 261 Avg: 251.8 Std: 5.23068 Time: 0.519113s
+------------------------------------------------------
+Instance: le450_25a (k=25)
+SA Best: 18 Worst: 26 Avg: 22.7 Std: 2.28254 Time: 0.269272s
+ABC Best: 35 Worst: 44 Avg: 40.1 Std: 2.42693 Time: 28.0212s
+DHS Best: 108 Worst: 122 Avg: 114.4 Std: 4.36348 Time: 0.493317s
+------------------------------------------------------
+Instance: DSJC125.1 (k=8)
+SA Best: 0 Worst: 0 Avg: 0 Std: 0 Time: 0.0299926s
+ABC Best: 0 Worst: 0 Avg: 0 Std: 0 Time: 0.173125s
+DHS Best: 0 Worst: 1 Avg: 0.3 Std: 0.458258 Time: 0.0483578s
+------------------------------------------------------
+Instance: DSJC250.5 (k=28)
+SA Best: 85 Worst: 104 Avg: 97.8 Std: 5.81034 Time: 0.400402s
+ABC Best: 112 Worst: 135 Avg: 125.8 Std: 5.56417 Time: 41.3613s
+DHS Best: 238 Worst: 268 Avg: 253.6 Std: 9.85089 Time: 0.572537s
+------------------------------------------------------
+Instance: DSJC500.5 (k=48)
+SA Best: 343 Worst: 382 Avg: 362.2 Std: 11.1247 Time: 1.37744s
+ABC Best: 358 Worst: 376 Avg: 368.5 Std: 5.73149 Time: 134.975s
+DHS Best: 805 Worst: 833 Avg: 817 Std: 10.4307 Time: 2.09551s
+------------------------------------------------------

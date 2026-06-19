@@ -91,7 +91,7 @@ void ABC::update_best_and_worst(){
 void ABC::create_test_new_candidate(FoodSource& food) {
   std::vector<int> candidate = food.individual;
 
-  int vertex =1 + rand() % graph.num_nodes;
+  int vertex = rand() % graph.num_nodes;
   int old_color = candidate[vertex];
   int new_color = old_color;
   while (new_color == old_color) {

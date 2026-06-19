@@ -1,71 +1,196 @@
 #include <iostream>
+#include <fstream>
+#include <climits>
+#include <cmath>
+#include <ctime>
+#include <chrono>
+#include <vector>
+#include <string>
 #include "Graph.h"
 #include "SA.h"
 #include "ABC.h"
 #include "DHS.h"
-#include <chrono>
-#include <string>
 
 using namespace std;
 
-int main() {
-    srand(time(0));
+const int RUNS = 10;
+const int ITERATIONS = 10000;
 
-    const string instance = "DSJC250.5.col";
-    const int n_colors = 28;
-    const int iterations = 10000;
+struct Results {
+    int best;
+    int worst;
+    float avg;
+    float std;
+    float time_mean;
+};
 
-    Graph graph;
-    if (!graph.load_from_file("instances/" + instance)) {
-        return 1;
+struct InstanceConfig {
+    string file;
+    string name;
+    int colors;
+};
+
+bool load_graph(Graph& graph, const string& file) {
+    if (graph.load_from_file("./instances/" + file)) return true;
+    if (graph.load_from_file("../instances/" + file)) return true;
+    return false;
+}
+
+Results runABC(Graph& graph, int colors, int colony_size, int limit) {
+    int best = INT_MAX;
+    int worst = -1;
+    float avg = 0;
+    float std = 0;
+    float time_sum = 0;
+    vector<int> fitnesses;
+
+    for (int run = 0; run < RUNS; run++) {
+        srand(time(0) + run);
+        ABC abc(graph, colors, colony_size, limit, ITERATIONS);
+
+        auto start = chrono::steady_clock::now();
+        vector<int> result = abc.run();
+        auto end = chrono::steady_clock::now();
+
+        int best_run = result[0];
+        time_sum += chrono::duration<double>(end - start).count();
+
+        if (best_run < best) best = best_run;
+        if (best_run > worst) worst = best_run;
+        avg += best_run;
+        fitnesses.push_back(best_run);
     }
 
-    cout << "Instance: " << instance << endl;
-    cout << "Nodes: " << graph.num_nodes << ", edges: " << graph.num_edges << endl;
-    cout << "Colors (k): " << n_colors << ", iterations: " << iterations << endl << endl;
+    avg /= RUNS;
+    for (int i = 0; i < (int)fitnesses.size(); i++) {
+        std += (fitnesses[i] - avg) * (fitnesses[i] - avg);
+    }
+    std = sqrt(std / RUNS);
 
-    float temperature = 100.0f;
-    float alpha = 0.99f;
+    cout << "ABC Best: " << best << " Worst: " << worst << " Avg: " << avg
+         << " Std: " << std << " Time: " << time_sum / RUNS << "s" << endl;
+    return {best, worst, avg, std, time_sum / RUNS};
+}
 
-    cout << "SA running (baseline)" << endl;
-    SA sa(n_colors, graph, iterations, temperature, alpha);
+Results runDHS(Graph& graph, int colors, int hms, double hmcr, double par) {
+    int best = INT_MAX;
+    int worst = -1;
+    float avg = 0;
+    float std = 0;
+    float time_sum = 0;
+    vector<int> fitnesses;
 
-    auto start = chrono::steady_clock::now();
-    vector<int> results = sa.run();
-    auto end = chrono::steady_clock::now();
+    for (int run = 0; run < RUNS; run++) {
+        srand(time(0) + run);
+        DHS dhs(graph, colors, hms, hmcr, par, ITERATIONS);
 
-    cout << "Best fitness: " << results[0] << endl;
-    cout << "Worst fitness: " << results[1] << endl;
-    cout << "SA run time: " << chrono::duration<double>(end - start).count() << " seconds\n\n";
+        auto start = chrono::steady_clock::now();
+        vector<int> result = dhs.run();
+        auto end = chrono::steady_clock::now();
 
-    int colony_size = 20;
-    int limit = 50;
+        int best_run = result[0];
+        time_sum += chrono::duration<double>(end - start).count();
 
-    cout << "ABC running" << endl;
-    ABC abc(graph, n_colors, colony_size, limit, iterations);
+        if (best_run < best) best = best_run;
+        if (best_run > worst) worst = best_run;
+        avg += best_run;
+        fitnesses.push_back(best_run);
+    }
 
-    start = chrono::steady_clock::now();
-    results = abc.run();
-    end = chrono::steady_clock::now();
+    avg /= RUNS;
+    for (int i = 0; i < (int)fitnesses.size(); i++) {
+        std += (fitnesses[i] - avg) * (fitnesses[i] - avg);
+    }
+    std = sqrt(std / RUNS);
 
-    cout << "Best fitness: " << results[0] << endl;
-    cout << "Worst fitness: " << results[1] << endl;
-    cout << "ABC run time: " << chrono::duration<double>(end - start).count() << " seconds\n\n";
+    cout << "DHS Best: " << best << " Worst: " << worst << " Avg: " << avg
+         << " Std: " << std << " Time: " << time_sum / RUNS << "s" << endl;
+    return {best, worst, avg, std, time_sum / RUNS};
+}
 
-    int harmony_size = 20;
-    double HMCR = 0.9;
-    double PAR = 0.3;
+Results runSA(Graph& graph, int colors, float temperature, float alpha) {
+    int best = INT_MAX;
+    int worst = -1;
+    float avg = 0;
+    float std = 0;
+    float time_sum = 0;
+    vector<int> fitnesses;
 
-    cout << "DHS running" << endl;
-    DHS dhs(graph, n_colors, harmony_size, HMCR, PAR, iterations);
+    for (int run = 0; run < RUNS; run++) {
+        srand(time(0) + run);
+        SA sa(colors, graph, ITERATIONS, temperature, alpha);
 
-    start = chrono::steady_clock::now();
-    results = dhs.run();
-    end = chrono::steady_clock::now();
+        auto start = chrono::steady_clock::now();
+        vector<int> result = sa.run();
+        auto end = chrono::steady_clock::now();
 
-    cout << "Best fitness: " << results[0] << endl;
-    cout << "Worst fitness: " << results[1] << endl;
-    cout << "DHS run time: " << chrono::duration<double>(end - start).count() << " seconds\n";
+        int best_run = result[0];
+        time_sum += chrono::duration<double>(end - start).count();
 
+        if (best_run < best) best = best_run;
+        if (best_run > worst) worst = best_run;
+        avg += best_run;
+        fitnesses.push_back(best_run);
+    }
+
+    avg /= RUNS;
+    for (int i = 0; i < (int)fitnesses.size(); i++) {
+        std += (fitnesses[i] - avg) * (fitnesses[i] - avg);
+    }
+    std = sqrt(std / RUNS);
+
+    cout << "SA Best: " << best << " Worst: " << worst << " Avg: " << avg
+         << " Std: " << std << " Time: " << time_sum / RUNS << "s" << endl;
+    return {best, worst, avg, std, time_sum / RUNS};
+}
+
+int main() {
+    vector<InstanceConfig> instances = {
+        {"queen6_6.col.txt", "queen6_6", 7},
+        {"queen8_8.col.txt", "queen8_8", 9},
+        {"queen12_12.col.txt", "queen12_12", 13},
+        {"le450_15b.col.txt", "le450_15b", 15},
+        {"le450_25a.col.txt", "le450_25a", 25},
+        {"DSJC125.1.col", "DSJC125.1", 8},
+        {"DSJC250.5.col", "DSJC250.5", 28},
+        {"DSJC500.5.col", "DSJC500.5", 48},
+    };
+
+    const int colony_size = 50;
+    const int limit = 200;
+    const int hms = 5;
+    const double hmcr = 0.95;
+    const double par = 0.2;
+    const float temperature = 100.0f;
+    const float alpha = 0.99f;
+
+    ofstream csv("./results/results.csv");
+    csv << "algorithm,instance,best,worst,avg,std,time_mean" << endl;
+
+    for (const InstanceConfig& config : instances) {
+        Graph graph;
+        if (!load_graph(graph, config.file)) {
+            cerr << "Error: can't load " << config.file << endl;
+            return 1;
+        }
+
+        cout << "Instance: " << config.name << " (k=" << config.colors << ")" << endl;
+
+        Results r_sa = runSA(graph, config.colors, temperature, alpha);
+        csv << "SA," << config.name << "," << r_sa.best << "," << r_sa.worst << ","
+            << r_sa.avg << "," << r_sa.std << "," << r_sa.time_mean << endl;
+
+        Results r_abc = runABC(graph, config.colors, colony_size, limit);
+        csv << "ABC," << config.name << "," << r_abc.best << "," << r_abc.worst << ","
+            << r_abc.avg << "," << r_abc.std << "," << r_abc.time_mean << endl;
+
+        Results r_dhs = runDHS(graph, config.colors, hms, hmcr, par);
+        csv << "DHS," << config.name << "," << r_dhs.best << "," << r_dhs.worst << ","
+            << r_dhs.avg << "," << r_dhs.std << "," << r_dhs.time_mean << endl;
+
+        cout << "------------------------------------------------------" << endl;
+    }
+
+    csv.close();
     return 0;
 }

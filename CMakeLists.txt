@@ -16,3 +16,11 @@ add_executable(OM_final_project
         DHS.cpp
         DHS.h
 )
+
+add_executable(tune
+        tune.cpp
+        Node.cpp
+        Graph.cpp
+        ABC.cpp
+        DHS.cpp
+)
